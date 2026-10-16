@@ -228,7 +228,9 @@
   .carousel {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr);
+    /* карточки не тянутся на всю высоту: максимум 520 px, на низких окнах сжимаются */
+    grid-template-rows: minmax(0, 520px);
+    align-content: start;
     gap: 16px;
     margin: 0;
     padding: 0 0 8px;
