@@ -1,0 +1,33 @@
+:root {
+  /* color */
+  --graphite: #121413;
+  --graphite-deep: #0B0C0B;
+  --surface: #1A1D1C;
+  --milk: #EAE7E2;
+  --gold: #E8C547;
+  --gold-hover: #F0D467;
+  --smoke: #8A908D;
+  --line-subtle: rgba(234, 231, 226, 0.18);
+  --line: rgba(234, 231, 226, 0.30);
+  --line-card: rgba(234, 231, 226, 0.14);
+  --bar-off: rgba(234, 231, 226, 0.22);
+
+  /* type */
+  --font-display: 'Geologica', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+  --ls-display: -0.05em;
+  --lh-display: 0.92;
+
+  /* space */
+  --s-1: 4px; --s-2: 6px; --s-3: 8px; --s-4: 12px; --s-5: 16px;
+  --s-6: 20px; --s-7: 24px; --s-8: 32px;
+
+  /* shape and motion */
+  --radius: 0;
+  --border: 1px solid var(--line);
+  --tap-min: 44px;
+  --ease-reveal: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-slide: 0.5s ease;
+  --t-reveal: 0.7s ease;
+  --t-ui: 0.2s ease;
+}
