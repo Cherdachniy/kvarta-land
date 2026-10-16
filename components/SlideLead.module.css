@@ -1,0 +1,382 @@
+/* Телефон: подпись и заголовок сверху, ниже прокручиваемая форма.
+   Десктоп: слева заголовок и выбор, справа поля (DESIGN.md, слайд 04). */
+
+.form {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin: 12px 0 18px;
+  /* в DESIGN.md 10.6vw: при нём «ЗАБРОНИРОВАТЬ» не влезает в 390 px и рвётся посреди слова */
+  font-size: clamp(28px, min(9vw, 5.4vh), 56px);
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 4px;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 0 6px;
+  touch-action: pan-x;
+}
+
+.chip {
+  flex: none;
+  min-height: 48px;
+  padding: 0 18px;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--milk);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color var(--t-ui),
+    color var(--t-ui),
+    border-color var(--t-ui),
+    transform 0.15s ease;
+}
+
+.chip:hover {
+  border-color: var(--gold);
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--graphite);
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-subtle);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+}
+
+.summaryLine {
+  text-transform: uppercase;
+}
+
+.summaryNote {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line-subtle);
+  font-size: 12px;
+  color: var(--smoke);
+}
+
+.fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.optional {
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.input {
+  width: 100%;
+  min-height: 56px;
+  padding: 14px 16px;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--milk);
+  font-family: var(--font-display);
+  font-size: 18px;
+  user-select: text;
+  -webkit-user-select: text;
+  transition: border-color var(--t-ui);
+}
+
+.input::placeholder {
+  color: var(--smoke);
+}
+
+.input:focus {
+  border-color: var(--gold);
+  outline: none;
+}
+
+.input:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--gold);
+}
+
+.textarea {
+  min-height: 56px;
+  resize: vertical;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.hint,
+.error {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--smoke);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--gold);
+}
+
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* На телефоне кнопка прилипает к низу прокручиваемой формы — всегда на экране. */
+.submitRow {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 12px;
+  background: var(--graphite);
+}
+
+.addComment {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--smoke);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--t-ui);
+}
+
+.addComment:hover {
+  color: var(--gold);
+}
+
+.statusSlot:focus {
+  outline: none;
+}
+
+.sendError {
+  padding: 12px 14px;
+  border: 1px solid var(--gold);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.success {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.success:focus {
+  outline: none;
+}
+
+.successTop {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 16px;
+}
+
+.ready {
+  font-size: clamp(64px, min(24vw, 12vh), 130px);
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  color: var(--gold);
+}
+
+.successText {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.restart {
+  min-height: 56px;
+}
+
+@media (max-width: 767px) {
+  .choiceDone {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+    grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 1fr);
+    grid-template-areas:
+      ".      right"
+      "intro  right"
+      "choice right"
+      ".      right";
+    column-gap: clamp(32px, 6vw, 120px);
+    row-gap: 28px;
+  }
+
+  .intro {
+    grid-area: intro;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .title {
+    margin: 0;
+    font-size: clamp(32px, min(4.2vw, 7vh), 68px);
+  }
+
+  .body {
+    display: contents;
+  }
+
+  .choice {
+    grid-area: choice;
+    gap: 12px;
+    max-width: 640px;
+  }
+
+  .chips {
+    flex-wrap: wrap;
+    overflow: visible;
+    padding: 0;
+    touch-action: auto;
+  }
+
+  .summary {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+
+  .fields,
+  .success {
+    grid-area: right;
+    align-self: center;
+    max-height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    flex: none;
+    gap: 22px;
+  }
+
+  .fields::-webkit-scrollbar,
+  .success::-webkit-scrollbar {
+    display: none;
+  }
+
+  .input {
+    min-height: 60px;
+    padding: 14px 18px;
+    font-size: 20px;
+  }
+
+  .textarea {
+    min-height: 60px;
+    font-size: 17px;
+  }
+
+  .submitRow {
+    position: static;
+    margin-top: 0;
+    padding-top: 0;
+    background: none;
+  }
+
+  .sendError {
+    padding: 14px 16px;
+  }
+
+  .success {
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .successTop {
+    padding-top: 0;
+  }
+
+  .successSummary {
+    display: none;
+  }
+
+  .ready {
+    font-size: clamp(80px, min(10vw, 16vh), 180px);
+  }
+
+  .successText {
+    font-size: 15px;
+  }
+
+  .restart {
+    align-self: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip,
+  .input {
+    transition: none;
+  }
+}

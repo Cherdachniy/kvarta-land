@@ -1,0 +1,135 @@
+.bgnum {
+  right: -14px;
+  top: 130px;
+  font-size: min(80vw, 390px);
+}
+
+/* Телефон: подпись сверху, середина по центру, кнопка внизу. */
+.captionDesktop,
+.ctaDesktop {
+  display: none;
+}
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding: 16px 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.grid::-webkit-scrollbar {
+  display: none;
+}
+
+.lead,
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.title {
+  position: relative;
+  font-size: clamp(30px, min(11vw, 5.8vh), 62px);
+}
+
+.price {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.amount {
+  font-weight: 900;
+  font-size: clamp(96px, min(34vw, 15vh), 190px);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: var(--gold);
+}
+
+.per {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.terms {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: var(--border);
+}
+
+.terms li {
+  border-top: var(--border);
+  padding: 10px 0;
+}
+
+@media (min-width: 768px) {
+  .bgnum {
+    right: 2vw;
+    top: 2vh;
+    font-size: min(56vw, 78vh);
+  }
+
+  .captionMobile,
+  .ctaMobile {
+    display: none;
+  }
+
+  .captionDesktop,
+  .ctaDesktop {
+    display: block;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 460px);
+    grid-template-rows: minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 120px);
+    align-items: stretch;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .lead,
+  .side {
+    justify-content: center;
+    min-height: 0;
+  }
+
+  .title {
+    font-size: clamp(36px, min(5.6vw, 9vh), 96px);
+  }
+
+  .price {
+    gap: 14px;
+  }
+
+  .amount {
+    font-size: clamp(96px, min(12vw, 20vh), 240px);
+  }
+
+  .per {
+    font-size: 15px;
+  }
+
+  .terms {
+    font-size: 14px;
+  }
+
+  .terms li {
+    padding: 12px 0;
+  }
+}

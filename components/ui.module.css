@@ -1,0 +1,274 @@
+/* Общие элементы Stories: слайд, появление, контурная цифра, кнопки, подписи.
+   Значения — из docs/design/DESIGN.md, разделы 2, 5, 6. */
+
+/* ——— слайд ——— */
+
+.slide {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  padding: 104px 20px max(20px, env(safe-area-inset-bottom));
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--t-slide),
+    transform var(--t-slide),
+    visibility 0s linear 0.5s;
+}
+
+.slide:focus {
+  outline: none;
+}
+
+.on {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.before {
+  transform: translateX(-36px);
+}
+
+.after {
+  transform: translateX(36px);
+}
+
+/* ——— появление текста: каскад через --d ——— */
+
+.rv {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity var(--t-reveal),
+    transform 0.8s var(--ease-reveal);
+}
+
+.on .rv {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--d, 0ms);
+}
+
+/* ——— контурная цифра на фоне ——— */
+
+@keyframes drift {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.1) translateY(-10px);
+  }
+}
+
+.bgnum {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(234, 231, 226, 0.12);
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 0.8;
+}
+
+.on .bgnum {
+  animation: drift 14s ease-out forwards;
+}
+
+/* ——— типографика ——— */
+
+.caption {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--smoke);
+}
+
+.fieldLabel {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--smoke);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-display);
+  line-height: var(--lh-display);
+  overflow-wrap: break-word;
+}
+
+.gold {
+  color: var(--gold);
+}
+
+.smoke {
+  color: var(--smoke);
+}
+
+.milk {
+  color: var(--milk);
+}
+
+/* ——— кнопки ——— */
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--gold);
+  color: var(--graphite);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background-color var(--t-ui);
+}
+
+.cta:hover {
+  background: var(--gold-hover);
+}
+
+.cta:active {
+  transform: scale(0.97);
+}
+
+.cta[disabled] {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.ctaSmall {
+  min-height: 56px;
+  font-size: 15px;
+}
+
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 16px;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--milk);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color var(--t-ui),
+    color var(--t-ui),
+    transform 0.15s ease;
+}
+
+.ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.ghost:active {
+  transform: scale(0.97);
+}
+
+.icon {
+  flex: none;
+}
+
+/* ——— скрытая прокрутка внутри слайда ——— */
+
+.scroll {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ——— десктоп ——— */
+
+@media (min-width: 768px) {
+  .slide {
+    padding: 8px var(--pad-desktop) 24px;
+  }
+
+  .before {
+    transform: translateX(-48px);
+  }
+
+  .after {
+    transform: translateX(48px);
+  }
+
+  .rv {
+    transform: translateY(34px);
+    transition:
+      opacity var(--t-reveal),
+      transform 0.9s var(--ease-reveal);
+  }
+
+  .bgnum {
+    -webkit-text-stroke-color: rgba(234, 231, 226, 0.1);
+  }
+
+  .on .bgnum {
+    animation-duration: 16s;
+  }
+
+  .cta {
+    min-height: 64px;
+    padding: 0 24px;
+    font-size: 18px;
+  }
+
+  .cta:active {
+    transform: scale(0.98);
+  }
+
+  .ctaSmall {
+    min-height: 56px;
+    font-size: 15px;
+  }
+
+  .ghost {
+    padding: 0 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide,
+  .rv,
+  .cta,
+  .ghost {
+    transition: none;
+  }
+
+  .on .bgnum {
+    animation: none;
+  }
+}

@@ -1,0 +1,308 @@
+/* Появление: на телефоне въезжает вся карусель, на десктопе — карточки по очереди.
+   Активный слайд помечен data-active="true" (см. Slide.tsx). */
+
+.head {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin: 12px 0 18px;
+  font-size: clamp(30px, min(11vw, 5.6vh), 58px);
+}
+
+.hint {
+  display: none;
+}
+
+.carousel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 12px;
+  margin: 0 -20px;
+  padding: 0 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 20px;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity var(--t-reveal),
+    transform 0.8s var(--ease-reveal);
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+[data-active="true"] .carousel {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--d, 0ms);
+}
+
+.cardWrap {
+  flex: 0 0 80%;
+  max-width: 340px;
+  min-height: 0;
+  display: flex;
+  scroll-snap-align: start;
+}
+
+.card {
+  position: relative;
+  isolation: isolate;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  background: var(--surface);
+  border: 1px solid var(--line-card);
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.card::-webkit-scrollbar {
+  display: none;
+}
+
+.selected {
+  border-color: var(--gold);
+}
+
+.cardNum {
+  right: -6px;
+  bottom: 40px;
+  font-size: 150px;
+}
+
+.meta {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--smoke);
+}
+
+.naming {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.name {
+  font-size: clamp(30px, 9.4vw, 46px);
+  overflow-wrap: anywhere;
+}
+
+.sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+}
+
+.notes {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 84px; /* место под 3 строки, чтобы цены стояли на одной высоте */
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.notes li {
+  border-top: 1px solid var(--line-subtle);
+  padding-top: 6px;
+}
+
+.buy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.amount {
+  font-weight: 900;
+  font-size: 60px;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: var(--gold);
+}
+
+.currency {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--smoke);
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot,
+.dotOn {
+  display: block;
+  height: 4px;
+  width: 10px;
+  background: var(--line);
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.dotOn {
+  width: 28px;
+  background: var(--gold);
+}
+
+@media (min-width: 768px) {
+  .head {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 32px;
+    padding-bottom: 24px;
+  }
+
+  .headText {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .title {
+    margin: 0;
+    font-size: clamp(34px, min(4.6vw, 7.2vh), 72px);
+  }
+
+  .br {
+    display: none;
+  }
+
+  .hint {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--smoke);
+  }
+
+  .carousel {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+    gap: 16px;
+    margin: 0;
+    padding: 0 0 8px;
+    overflow: visible;
+    touch-action: auto;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .cardWrap {
+    max-width: none;
+    opacity: 0;
+    transform: translateY(34px);
+    transition:
+      opacity var(--t-reveal),
+      transform 0.9s var(--ease-reveal);
+  }
+
+  [data-active="true"] .cardWrap {
+    opacity: 1;
+    transform: none;
+    transition-delay: var(--d, 0ms);
+  }
+
+  .card {
+    justify-content: flex-start;
+    padding: 24px;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    border-color: rgba(232, 197, 71, 0.6);
+    transform: translateY(-4px);
+  }
+
+  .selected,
+  .selected:hover {
+    border-color: var(--gold);
+  }
+
+  .cardNum {
+    right: -8px;
+    bottom: 100px;
+    font-size: 170px;
+  }
+
+  .name {
+    font-size: clamp(28px, 2.7vw, 46px);
+  }
+
+  .notes {
+    min-height: 90px;
+  }
+
+  .buy {
+    margin-top: auto;
+  }
+
+  .amount {
+    font-size: clamp(48px, 4.4vw, 72px);
+  }
+
+  .foot {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel,
+  .cardWrap,
+  .card,
+  .dot,
+  .dotOn {
+    transition: none;
+  }
+}
