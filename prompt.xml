@@ -1,0 +1,875 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project_specification version="1.0" language="ru">
+
+  <context>
+    <project>
+      <name>Кварта — свежая обжарка кофе</name>
+      <type>Landing page with lead generation API</type>
+      <description>
+        Разработать адаптивный лендинг для небольшой кофейной обжарки
+        из Минска. Компания обжаривает кофе небольшими партиями,
+        делает акцент на свежести зерна и доставляет заказы клиентам
+        через менеджера после получения заявки.
+      </description>
+      <source>kvarta-brief.pdf, pages 1-4</source>
+      <business_goal>
+        Получать заявки на подписку и разовые заказы, а также
+        вопросы потенциальных клиентов.
+      </business_goal>
+      <conversion_goal>
+        Пользователь должен быстро понять преимущества кофе,
+        ознакомиться с ассортиментом и отправить заявку с телефона.
+      </conversion_goal>
+    </project>
+
+    <client>
+      <name>Обжарка «Кварта»</name>
+      <location>Минск, Беларусь</location>
+      <founders>Аня и Дмитрий, бывшие бариста</founders>
+      <founded>2019</founded>
+      <roasting_schedule>Каждый четверг</roasting_schedule>
+      <delivery_schedule>Каждую пятницу по Минску</delivery_schedule>
+      <batch_size>5 кг</batch_size>
+      <freshness>
+        Клиент получает кофе на 1-3 день после обжарки.
+      </freshness>
+      <pickup_address>Минск, ул. Короля, 9</pickup_address>
+      <pickup_hours>
+        Понедельник-пятница: 08:00-20:00.
+        Суббота-воскресенье: 10:00-18:00.
+      </pickup_hours>
+      <delivery>
+        Доставка по Минску по пятницам.
+        Бесплатно при заказе от 50 BYN.
+      </delivery>
+    </client>
+
+    <assets>
+      <file path="kvarta-brief.pdf">
+        Исходное тестовое задание. Использовать как источник
+        требований и фактов о клиенте.
+      </file>
+      <logo>
+        Готового логотипа нет. Создать текстовый логотип «кварта».
+      </logo>
+      <photography>
+        Подобрать подходящие фотографии на Unsplash или Pexels
+        либо использовать сгенерированные изображения.
+        Проверить условия использования изображений.
+      </photography>
+      <existing_code>
+        Исходный код проекта может отсутствовать.
+        Перед началом проверить структуру репозитория и
+        использовать существующую конфигурацию, если она есть.
+      </existing_code>
+    </assets>
+
+    <audience>
+      <age>25-45</age>
+      <segments>
+        Люди, которые пьют кофе дома или в офисе.
+      </segments>
+      <devices>
+        Основной сценарий — мобильный переход из Instagram
+        или Яндекс.Директа.
+      </devices>
+      <behavior>
+        Минимизировать количество действий до отправки заявки.
+      </behavior>
+    </audience>
+  </context>
+
+  <requirements>
+    <technology>
+      <framework>Next.js, App Router</framework>
+      <language>TypeScript, strict mode</language>
+      <rendering>
+        Server Components по умолчанию.
+        Client Components только там, где нужны интерактивность
+        или состояние формы.
+      </rendering>
+      <styling>CSS Modules или обычный CSS</styling>
+      <database>PostgreSQL, managed hosting</database>
+      <deployment>Vercel</deployment>
+      <validation>
+        Единая схема валидации на клиенте и сервере,
+        например Zod.
+      </validation>
+      <package_manager>pnpm</package_manager>
+    </technology>
+
+    <constraints>
+      <item>
+        Не реализовывать корзину, оформление заказа с оплатой,
+        личный кабинет или интернет-магазин.
+      </item>
+      <item>
+        Не добавлять регистрацию пользователей.
+      </item>
+      <item>
+        Не создавать сложную CMS или административную панель.
+      </item>
+      <item>
+        Не использовать моковую отправку формы в production.
+      </item>
+      <item>
+        Форма должна работать на опубликованном сайте.
+      </item>
+      <item>
+        Не хранить заявки только в памяти процесса или
+        в локальном файле на Vercel.
+      </item>
+      <item>
+        Не придумывать дополнительные факты о компании,
+        происхождении зерна или сертификатах.
+      </item>
+      <item>
+        Не использовать тяжёлые библиотеки анимаций без
+        конкретной необходимости.
+      </item>
+      <item>
+        Соблюдать ограничение тестового задания:
+        4-6 часов чистой работы.
+      </item>
+    </constraints>
+
+    <quality>
+      <accessibility>
+        Семантический HTML, видимый focus, корректные label,
+        клавиатурная навигация и достаточный контраст.
+      </accessibility>
+      <responsive>
+        Сначала мобильная версия, затем планшет и desktop.
+      </responsive>
+      <performance>
+        Оптимизированные изображения, отсутствие layout shift,
+        минимум JavaScript на клиенте.
+      </performance>
+      <security>
+        Серверная валидация, параметризованные запросы,
+        безопасная обработка ошибок, ограничение размера запроса
+        и защита от автоматического спама.
+      </security>
+    </quality>
+  </requirements>
+
+  <design>
+    <direction>
+      Дизайн небольшой независимой кофейной мастерской.
+      Тёплый, тактильный, редакционный, немного ремесленный.
+      Визуально — работа небольшой дизайн-студии для конкретного
+      бренда, а не типовой шаблон SaaS или интернет-магазина.
+    </direction>
+
+    <brand>
+      <personality>
+        Честность, свежесть, простота, внимание к деталям.
+      </personality>
+      <tone>
+        Разговорный, спокойный, конкретный.
+        Без пафоса, псевдопремиальности и агрессивных продаж.
+      </tone>
+      <palette>
+        <color name="coffee" hex="#35251F">
+          Основной тёмный цвет, заголовки и контрастные блоки.
+        </color>
+        <color name="cream" hex="#F5F0E7">
+          Основной фон.
+        </color>
+        <color name="paper" hex="#FFFCF6">
+          Карточки и поверхности.
+        </color>
+        <color name="terracotta" hex="#B95F43">
+          Акценты и основные CTA.
+        </color>
+        <color name="sage" hex="#87917A">
+          Дополнительные акценты.
+        </color>
+        <color name="muted" hex="#776D64">
+          Вторичный текст.
+        </color>
+      </palette>
+      <typography>
+        Использовать выразительный serif для крупных заголовков
+        и нейтральный sans-serif для основного текста.
+        Рассмотреть доступные Google Fonts, например Lora
+        и Manrope, с резервными системными шрифтами.
+      </typography>
+      <logo>
+        Строчное написание «кварта».
+        Допускается небольшой графический знак, связанный
+        с кофейным зерном или обжаркой.
+      </logo>
+    </brand>
+
+    <art_direction>
+      <item>
+        Крупная типографика, асимметричная композиция
+        и достаточно свободного пространства.
+      </item>
+      <item>
+        Реалистичные фотографии зерна, обжарки, упаковки,
+        рук мастера и приготовления кофе.
+      </item>
+      <item>
+        Сочетание фотографий, тонких разделителей,
+        небольших подписей и фактических деталей.
+      </item>
+      <item>
+        Единый стиль карточек, кнопок, полей и информационных блоков.
+      </item>
+      <item>
+        На мобильном экране основной заголовок, преимущества
+        и CTA должны быть видны без лишней прокрутки.
+      </item>
+    </art_direction>
+
+    <anti_patterns>
+      <item>Типовой hero с градиентом и плавающими карточками.</item>
+      <item>Стандартная сетка одинаковых карточек без композиции.</item>
+      <item>Стоковые изображения кофе с искусственным глянцем.</item>
+      <item>Избыточные тени, скругления и декоративные эффекты.</item>
+      <item>Неподтверждённые отзывы, рейтинги и счётчики продаж.</item>
+      <item>Бессмысленные анимации и эффекты ради эффекта.</item>
+      <item>
+        Повторяющиеся AI-тексты вроде «идеальное сочетание
+        вкуса и качества».
+      </item>
+    </anti_patterns>
+  </design>
+
+  <structure>
+    <section order="1" id="header">
+      <name>Header</name>
+      <content>
+        Текстовый логотип «кварта», навигация по якорям
+        и кнопка «Выбрать кофе».
+      </content>
+      <behavior>
+        На мобильном — компактная навигация без сложного меню,
+        если все ссылки можно уместить в простой layout.
+      </behavior>
+    </section>
+
+    <section order="2" id="hero">
+      <name>Hero</name>
+      <purpose>Сразу объяснить, что продаёт компания.</purpose>
+      <headline>
+        Хороший кофе начинается со свежей обжарки.
+      </headline>
+      <supporting_text>
+        Обжариваем небольшими партиями по четвергам.
+        Доставляем по Минску по пятницам — зерно приезжает
+        к вам на 1-3 день после обжарки.
+      </supporting_text>
+      <primary_cta>Оставить заявку</primary_cta>
+      <secondary_cta>Посмотреть кофе</secondary_cta>
+      <visual>
+        Одна сильная фотография с натуральной текстурой
+        и выразительной композицией.
+      </visual>
+    </section>
+
+    <section order="3" id="freshness">
+      <name>Свежесть в деталях</name>
+      <content>
+        Рассказать об Ане и Дмитрии, их опыте работы бариста
+        и небольших партиях обжарки по 5 кг.
+      </content>
+      <facts>
+        <fact>Обжариваем с 2019 года.</fact>
+        <fact>Обжарка — четверг.</fact>
+        <fact>Доставка — пятница.</fact>
+        <fact>Получение кофе — на 1-3 день после обжарки.</fact>
+      </facts>
+      <visual>
+        Использовать небольшие фотографии, подписи
+        или горизонтальную последовательность этапов.
+      </visual>
+    </section>
+
+    <section order="4" id="catalog">
+      <name>Ассортимент</name>
+      <intro>
+        Четыре позиции с точными ценами и характеристиками
+        из исходного задания.
+      </intro>
+      <products>
+        <product id="ethiopia">
+          <name>Эфиопия Иргачеффе</name>
+          <price currency="BYN">32</price>
+          <weight unit="g">250</weight>
+          <flavor>Цветочный, бергамот</flavor>
+          <roast>Светлая обжарка</roast>
+          <interest_value>ethiopia</interest_value>
+        </product>
+        <product id="colombia">
+          <name>Колумбия Уила</name>
+          <price currency="BYN">29</price>
+          <weight unit="g">250</weight>
+          <flavor>Карамель, красное яблоко</flavor>
+          <interest_value>colombia</interest_value>
+        </product>
+        <product id="brazil">
+          <name>Бразилия Серрадо</name>
+          <price currency="BYN">26</price>
+          <weight unit="g">250</weight>
+          <flavor>Орех, шоколад</flavor>
+          <roast>Под эспрессо</roast>
+          <interest_value>brazil</interest_value>
+        </product>
+        <product id="drip">
+          <name>Дрип-пакеты, ассорти</name>
+          <price currency="BYN">18</price>
+          <quantity unit="pieces">10</quantity>
+          <interest_value>drip</interest_value>
+        </product>
+      </products>
+      <behavior>
+        Каждая позиция должна иметь CTA, который открывает
+        или заполняет форму заявки с выбранным продуктом.
+        Не создавать отдельный checkout.
+      </behavior>
+    </section>
+
+    <section order="5" id="subscription">
+      <name>Подписка</name>
+      <price currency="BYN" period="month">54</price>
+      <offer>
+        Две пачки по 250 г раз в месяц.
+        Доставка включена в стоимость.
+      </offer>
+      <cta>Оставить заявку на подписку</cta>
+      <behavior>
+        CTA устанавливает interest=subscription и переводит
+        пользователя к форме.
+      </behavior>
+    </section>
+
+    <section order="6" id="delivery">
+      <name>Доставка и самовывоз</name>
+      <delivery>
+        <schedule>Пятница</schedule>
+        <area>Минск</area>
+        <free_from currency="BYN">50</free_from>
+      </delivery>
+      <pickup>
+        <address>Минск, ул. Короля, 9</address>
+        <hours>
+          Пн-Пт 08:00-20:00;
+          Сб-Вс 10:00-18:00.
+        </hours>
+      </pickup>
+      <content>
+        Показать понятные условия получения кофе
+        без лишнего маркетингового текста.
+      </content>
+    </section>
+
+    <section order="7" id="lead-form">
+      <name>Форма заявки</name>
+      <fields>
+        <field name="name" type="text" required="true">
+          <label>Как к вам обращаться?</label>
+        </field>
+        <field name="phone" type="tel" required="true">
+          <label>Номер телефона</label>
+          <placeholder>+375 29 123-45-67</placeholder>
+          <validation>Белорусский мобильный номер.</validation>
+        </field>
+        <field name="interest" type="select" required="true">
+          <label>Что вас интересует?</label>
+          <option value="subscription">Подписка</option>
+          <option value="one_time">Разовый заказ</option>
+          <option value="question">Вопрос</option>
+        </field>
+        <field name="product" type="select" required="false">
+          <label>Выбранный кофе</label>
+          <options_source>Каталог products</options_source>
+          <behavior>
+            Показывать, когда интерес связан с разовым заказом.
+            Значение может отсутствовать для вопроса или подписки.
+          </behavior>
+        </field>
+        <field name="comment" type="textarea" required="false">
+          <label>Комментарий</label>
+        </field>
+      </fields>
+      <submit>
+        <label>Отправить заявку</label>
+        <loading>Отправляем...</loading>
+        <success>
+          Заявка принята. Менеджер свяжется с вами.
+        </success>
+        <error>
+          Не удалось отправить заявку. Проверьте соединение
+          и попробуйте ещё раз. Если проблема повторяется,
+          свяжитесь с нами другим способом.
+        </error>
+      </submit>
+      <validation_rules>
+        <rule>
+          Имя не должно быть пустым после trim().
+        </rule>
+        <rule>
+          Телефон нормализуется на сервере и проверяется
+          по белорусскому формату.
+        </rule>
+        <rule>
+          interest должен входить в разрешённый enum.
+        </rule>
+        <rule>
+          product должен соответствовать существующему продукту,
+          если передан.
+        </rule>
+        <rule>
+          Ограничить длину строк и комментария.
+        </rule>
+        <rule>
+          Клиентская валидация нужна для UX, серверная
+          является обязательной.
+        </rule>
+      </validation_rules>
+    </section>
+
+    <section order="8" id="contacts">
+      <name>Контакты и Footer</name>
+      <content>
+        Адрес мастерской, часы работы, условия доставки
+        и повторный CTA.
+      </content>
+      <social_links>
+        Добавлять только реальные ссылки, если они предоставлены.
+        Не придумывать аккаунты компании.
+      </social_links>
+    </section>
+  </structure>
+
+  <api>
+    <endpoint method="POST" path="/api/lead">
+      <purpose>
+        Принять, проверить и сохранить заявку.
+      </purpose>
+
+      <request content_type="application/json">
+        <schema>
+          {
+            "name": "string",
+            "phone": "string",
+            "interest": "subscription | one_time | question",
+            "product": "ethiopia | colombia | brazil | drip | null",
+            "comment": "string | null",
+            "utm_source": "string | null",
+            "utm_medium": "string | null",
+            "utm_campaign": "string | null",
+            "utm_content": "string | null",
+            "utm_term": "string | null",
+            "landing_page": "string | null",
+            "referrer": "string | null"
+          }
+        </schema>
+      </request>
+
+      <processing>
+        <step order="1">
+          Проверить Content-Type, размер тела запроса
+          и корректность JSON.
+        </step>
+        <step order="2">
+          Провести серверную валидацию всех полей.
+        </step>
+        <step order="3">
+          Нормализовать телефон к единому формату
+          +375XXXXXXXXX.
+        </step>
+        <step order="4">
+          Начать транзакцию и обеспечить сериализацию
+          обработки заявок с одинаковым нормализованным телефоном.
+        </step>
+        <step order="5">
+          Проверить, существует ли заявка с таким телефоном
+          за последние 10 минут.
+        </step>
+        <step order="6">
+          Если заявка уже существует, не создавать новую
+          и вернуть контролируемый ответ о повторной отправке.
+        </step>
+        <step order="7">
+          Если дубля нет, сохранить заявку и данные атрибуции.
+        </step>
+        <step order="8">
+          Зафиксировать транзакцию и вернуть ответ клиенту.
+        </step>
+      </processing>
+
+      <responses>
+        <response status="201">
+          Заявка успешно создана.
+        </response>
+        <response status="200">
+          Повторный запрос уже обработан; новая заявка не создана.
+          Вернуть безопасный признак duplicate.
+        </response>
+        <response status="400">
+          Некорректный JSON или формат запроса.
+        </response>
+        <response status="422">
+          Ошибка валидации с понятным описанием полей.
+        </response>
+        <response status="429">
+          Слишком много запросов.
+        </response>
+        <response status="500">
+          Ошибка сервера или хранилища.
+          Не раскрывать внутренние детали.
+        </response>
+      </responses>
+
+      <error_handling>
+        Клиент должен обрабатывать все неуспешные ответы,
+        таймауты и сетевые ошибки.
+        Во время отправки блокировать повторное нажатие кнопки.
+        При ошибке сохранять введённые данные.
+        Не показывать сообщение об успехе до подтверждения сервера.
+      </error_handling>
+    </endpoint>
+
+    <phone_validation>
+      <country>BY</country>
+      <canonical_format>+375XXXXXXXXX</canonical_format>
+      <normalization>
+        Разрешить распространённые разделители и форматирование.
+        Проверять корректность кода страны и длину номера.
+        Не считать произвольные строки валидными телефонами.
+      </normalization>
+      <client>
+        Показывать понятную ошибку рядом с полем.
+      </client>
+      <server>
+        Повторно валидировать номер после нормализации.
+      </server>
+    </phone_validation>
+
+    <deduplication>
+      <window_minutes>10</window_minutes>
+      <key>normalized_phone</key>
+      <scope>
+        Запретить создание второй заявки с тем же телефоном,
+        если предыдущая создана в течение последних 10 минут.
+      </scope>
+      <concurrency>
+        Два одновременных запроса с одним телефоном не должны
+        обходить проверку дублей. Использовать транзакцию
+        PostgreSQL с блокировкой по ключу телефона, например
+        pg_advisory_xact_lock(hash(normalized_phone)).
+      </concurrency>
+      <client_protection>
+        Disable submit while pending; использовать request state.
+      </client_protection>
+      <server_protection>
+        Дедупликация обязательна независимо от поведения клиента.
+      </server_protection>
+      <note>
+        Не использовать уникальность телефона на всю историю:
+        после истечения 10 минут новая заявка допустима.
+      </note>
+    </deduplication>
+
+    <attribution>
+      <capture>
+        Сохранять UTM-параметры при входе пользователя на сайт.
+        Передавать их в заявку при отправке формы.
+      </capture>
+      <fields>
+        <field>utm_source</field>
+        <field>utm_medium</field>
+        <field>utm_campaign</field>
+        <field>utm_content</field>
+        <field>utm_term</field>
+        <field>landing_page</field>
+        <field>referrer</field>
+      </fields>
+      <rules>
+        <rule>
+          Не терять исходные UTM при переходе между секциями
+          и открытии формы.
+        </rule>
+        <rule>
+          Сохранять данные при обновлении страницы в пределах
+          разумного срока действия кампании.
+        </rule>
+        <rule>
+          Не доверять атрибуции как данным безопасности:
+          значения поступают от клиента.
+        </rule>
+        <rule>
+          Ограничивать длину значений и не сохранять
+          произвольные чувствительные данные.
+        </rule>
+      </rules>
+    </attribution>
+  </api>
+
+  <database>
+    <decision>
+      PostgreSQL в managed-сервисе, например Neon.
+    </decision>
+    <reasoning>
+      Приложение разворачивается в serverless-среде Vercel.
+      Локальная SQLite-база или JSON-файл в файловой системе
+      деплоя не гарантируют постоянное хранение между инстансами
+      и повторными развёртываниями. PostgreSQL обеспечивает
+      постоянное хранилище, транзакции и согласованную обработку
+      конкурентных запросов.
+    </reasoning>
+
+    <table name="leads">
+      <field name="id" type="uuid" primary_key="true"/>
+      <field name="name" type="varchar(120)" nullable="false"/>
+      <field name="phone" type="varchar(13)" nullable="false"/>
+      <field name="interest" type="varchar(20)" nullable="false"/>
+      <field name="product" type="varchar(30)" nullable="true"/>
+      <field name="comment" type="text" nullable="true"/>
+      <field name="utm_source" type="varchar(255)" nullable="true"/>
+      <field name="utm_medium" type="varchar(255)" nullable="true"/>
+      <field name="utm_campaign" type="varchar(255)" nullable="true"/>
+      <field name="utm_content" type="varchar(255)" nullable="true"/>
+      <field name="utm_term" type="varchar(255)" nullable="true"/>
+      <field name="landing_page" type="text" nullable="true"/>
+      <field name="referrer" type="text" nullable="true"/>
+      <field name="created_at" type="timestamptz" nullable="false"/>
+    </table>
+
+    <indexes>
+      <index>
+        Индекс по phone и created_at для поиска дублей.
+      </index>
+      <index>
+        Индекс по created_at для последующего анализа заявок.
+      </index>
+    </indexes>
+
+    <configuration>
+      <secret>DATABASE_URL</secret>
+      <rule>
+        Секреты хранить только в переменных окружения
+        серверной среды.
+      </rule>
+      <rule>
+        Не включать секреты в NEXT_PUBLIC_* переменные.
+      </rule>
+      <rule>
+        Использовать совместимый с serverless пул подключений
+        или рекомендованный провайдером серверless-драйвер.
+      </rule>
+      <rule>
+        Добавить минимальную миграцию схемы базы.
+      </rule>
+    </configuration>
+
+    <alternative>
+      SQLite допустима для локальной разработки или хостинга
+      с постоянным диском и одним контролируемым экземпляром.
+      Для Vercel production выбрать внешнее постоянное хранилище.
+    </alternative>
+  </database>
+
+  <optional_features>
+    <feature priority="low" id="telegram-notification">
+      Дублирование заявки в Telegram через Bot API.
+      Реализовывать только после основной формы и базы данных.
+      Сбой Telegram не должен отменять сохранённую заявку.
+      Не хранить токен бота в клиентском коде.
+    </feature>
+    <feature priority="low" id="social-preview">
+      Open Graph title, description и изображение для превью
+      ссылки в мессенджерах.
+    </feature>
+    <feature priority="low" id="micro-animations">
+      Ненавязчивые переходы и hover-эффекты.
+      Учитывать prefers-reduced-motion.
+    </feature>
+  </optional_features>
+
+  <project_structure>
+    <directory name="app">
+      <file>layout.tsx</file>
+      <file>page.tsx</file>
+      <file>globals.css</file>
+      <directory name="api">
+        <directory name="lead">
+          <file>route.ts</file>
+        </directory>
+      </directory>
+    </directory>
+    <directory name="components">
+      <file>Header.tsx</file>
+      <file>Hero.tsx</file>
+      <file>Freshness.tsx</file>
+      <file>ProductCatalog.tsx</file>
+      <file>ProductCard.tsx</file>
+      <file>Subscription.tsx</file>
+      <file>DeliveryInfo.tsx</file>
+      <file>LeadForm.tsx</file>
+      <file>Footer.tsx</file>
+    </directory>
+    <directory name="lib">
+      <file>db.ts</file>
+      <file>lead-schema.ts</file>
+      <file>phone.ts</file>
+      <file>attribution.ts</file>
+    </directory>
+    <directory name="db">
+      <file>migrations/</file>
+    </directory>
+    <file>.env.example</file>
+    <file>README.md</file>
+  </project_structure>
+
+  <implementation_plan>
+    <step order="1">
+      Изучить PDF и существующий репозиторий.
+      Сформировать короткий план реализации.
+    </step>
+    <step order="2">
+      Создать структуру Next.js, TypeScript и базовые стили.
+    </step>
+    <step order="3">
+      Реализовать дизайн-систему и адаптивные секции лендинга.
+    </step>
+    <step order="4">
+      Реализовать форму, состояния загрузки, ошибки и успеха.
+    </step>
+    <step order="5">
+      Добавить схему PostgreSQL, миграцию и подключение базы.
+    </step>
+    <step order="6">
+      Реализовать POST /api/lead, серверную валидацию,
+      нормализацию телефона, дедупликацию и сохранение UTM.
+    </step>
+    <step order="7">
+      Проверить мобильный интерфейс и основные сценарии.
+    </step>
+    <step order="8">
+      Настроить Vercel, production-переменные окружения
+      и постоянное хранилище.
+    </step>
+    <step order="9">
+      Выполнить Lighthouse для мобильной версии.
+    </step>
+    <step order="10">
+      Подготовить README и проверить, что сайт и форма
+      работают после production-деплоя.
+    </step>
+  </implementation_plan>
+
+  <testing>
+    <test>
+      Валидная заявка создаётся и сохраняется в базе.
+    </test>
+    <test>
+      Пустое имя и неверный телефон отклоняются.
+    </test>
+    <test>
+      Номер с пробелами и дефисами нормализуется.
+    </test>
+    <test>
+      Двойной клик не создаёт две заявки.
+    </test>
+    <test>
+      Два параллельных запроса с одинаковым телефоном
+      не создают две заявки в течение 10 минут.
+    </test>
+    <test>
+      После 10 минут новая заявка с тем же телефоном разрешена.
+    </test>
+    <test>
+      Ошибка базы или сети не приводит к ложному сообщению успеха.
+    </test>
+    <test>
+      UTM-параметры сохраняются вместе с заявкой.
+    </test>
+    <test>
+      Форма работает на опубликованном сайте, а не только локально.
+    </test>
+    <test>
+      Все четыре продукта, цены, подписка и условия доставки
+      соответствуют исходному PDF.
+    </test>
+  </testing>
+
+  <deliverables>
+    <item>Публичная ссылка на работающий сайт.</item>
+    <item>Ссылка на репозиторий с последовательными коммитами.</item>
+    <item>Экспорт сессии AI-инструмента или скриншоты процесса.</item>
+    <item>Скриншот или отчёт Lighthouse для мобильной версии.</item>
+    <item>
+      README: архитектура, запуск, переменные окружения,
+      выбор базы данных, что сделано человеком и ИИ,
+      ошибки ИИ и ограничения реализации.
+    </item>
+  </deliverables>
+
+  <definition_of_done>
+    <criterion>
+      Лендинг визуально индивидуален, адаптивен и содержит
+      все обязательные секции.
+    </criterion>
+    <criterion>
+      Все CTA ведут к соответствующему сценарию заявки.
+    </criterion>
+    <criterion>
+      POST /api/lead валидирует и сохраняет заявки.
+    </criterion>
+    <criterion>
+      Дедупликация работает при двойном клике и конкурентных
+      запросах в течение 10 минут.
+    </criterion>
+    <criterion>
+      Данные атрибуции сохраняются и доступны в записи заявки.
+    </criterion>
+    <criterion>
+      Production-хранилище постоянно, секреты не раскрываются,
+      а ошибки отправки понятны пользователю.
+    </criterion>
+    <criterion>
+      Сайт опубликован, форма протестирована на production,
+      README содержит реальные инструкции и допущения.
+    </criterion>
+  </definition_of_done>
+
+  <ai_instructions>
+    <rule>
+      Сначала изучи исходное задание и репозиторий.
+      Не начинай с генерации всего проекта одним большим ответом.
+    </rule>
+    <rule>
+      Реализуй MVP по шагам, проверяя результат каждого этапа.
+    </rule>
+    <rule>
+      Принимай самостоятельные решения по деталям реализации,
+      если они не противоречат требованиям.
+    </rule>
+    <rule>
+      Не добавляй функциональность, не нужную для тестового задания.
+    </rule>
+    <rule>
+      Не выдумывай успешные результаты тестов, Lighthouse
+      или production-деплоя. Проверяй их фактически.
+    </rule>
+    <rule>
+      Если внешний сервис требует ключ или ручную настройку,
+      явно перечисли необходимые действия.
+    </rule>
+    <rule>
+      Создавай осмысленные коммиты по этапам, не объединяй
+      всю работу в один финальный коммит.
+    </rule>
+    <rule>
+      При обнаружении ошибок в сгенерированном коде исправляй
+      их, а не обходи отключением типов или проверок.
+    </rule>
+  </ai_instructions>
+
+</project_specification>
