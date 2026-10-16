@@ -81,10 +81,26 @@ export function SlideLead({ pos, choice, onChoice, friday, onRestart }: Props) {
   const [duplicate, setDuplicate] = useState(false);
   const inFlight = useRef(false);
   const statusRef = useRef<HTMLDivElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (status === "ok" || status === "error") statusRef.current?.focus({ preventScroll: true });
   }, [status]);
+
+  // На телефоне ряд чипов прокручивается по горизонтали: выбранный заранее вариант
+  // («Подписка», «Вопрос») может оказаться за краем. Докручиваем ряд до него —
+  // при смене выбора и при открытии экрана. На десктопе чипы переносятся, сдвиг нулевой.
+  useEffect(() => {
+    const row = chipsRef.current;
+    const chip = row?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (!row || !chip || pos !== "on") return;
+    const r = row.getBoundingClientRect();
+    const c = chip.getBoundingClientRect();
+    const shift = c.left < r.left ? c.left - r.left : c.right > r.right ? c.right - r.right : 0;
+    if (!shift) return;
+    const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    row.scrollBy({ left: shift, behavior: smooth ? "smooth" : "auto" });
+  }, [choice, pos]);
 
   function clearError(key: LeadField) {
     if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }));
@@ -194,6 +210,7 @@ export function SlideLead({ pos, choice, onChoice, friday, onRestart }: Props) {
               Ваш выбор
             </p>
             <div
+              ref={chipsRef}
               className={`${s.chips} ${ui.scroll}`}
               role="group"
               aria-labelledby="lead-choice-label"
