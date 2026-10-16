@@ -1,74 +1,78 @@
-// Ассортимент и цены — строго из брифа (kvarta-brief.pdf, стр. 2).
+// Ассортимент и цены — строго из брифа (kvarta-brief.pdf, стр. 2),
+// идентификаторы и подписи — из docs/design/tokens.json.
 
-export type ProductId = "ethiopia" | "colombia" | "brazil" | "drip";
+export type ProductId = "eth" | "col" | "bra" | "drip";
 
 export type Product = {
   id: ProductId;
+  n: string;
   name: string;
-  origin: string;
-  notes: string;
-  detail: string;
-  size: string;
+  sub: string;
+  pack: string;
+  notes: readonly string[];
   price: number;
+  full: string;
 };
 
 export const PRODUCTS: readonly Product[] = [
   {
-    id: "ethiopia",
-    name: "Иргачеффе",
-    origin: "Эфиопия",
-    notes: "цветочный, бергамот",
-    detail: "светлая обжарка",
-    size: "250 г",
+    id: "eth",
+    n: "01",
+    name: "Эфиопия",
+    sub: "Иргачеффе",
+    pack: "250 г",
+    notes: ["цветочный", "бергамот", "светлая обжарка"],
     price: 32,
+    full: "Эфиопия Иргачеффе · 250 г",
   },
   {
-    id: "colombia",
-    name: "Уила",
-    origin: "Колумбия",
-    notes: "карамель, красное яблоко",
-    detail: "",
-    size: "250 г",
+    id: "col",
+    n: "02",
+    name: "Колумбия",
+    sub: "Уила",
+    pack: "250 г",
+    notes: ["карамель", "красное яблоко"],
     price: 29,
+    full: "Колумбия Уила · 250 г",
   },
   {
-    id: "brazil",
-    name: "Серрадо",
-    origin: "Бразилия",
-    notes: "орех, шоколад",
-    detail: "под эспрессо",
-    size: "250 г",
+    id: "bra",
+    n: "03",
+    name: "Бразилия",
+    sub: "Серрадо",
+    pack: "250 г",
+    notes: ["орех", "шоколад", "под эспрессо"],
     price: 26,
+    full: "Бразилия Серрадо · 250 г",
   },
   {
     id: "drip",
-    name: "Дрип-пакеты",
-    origin: "Ассорти",
-    notes: "заварить в чашке, без кофемолки",
-    detail: "",
-    size: "10 штук",
+    n: "04",
+    name: "Дрип",
+    sub: "Пакеты, ассорти",
+    pack: "10 штук",
+    notes: ["10 штук", "ассорти"],
     price: 18,
+    full: "Дрип-пакеты, ассорти · 10 штук",
   },
 ];
 
 export const PRODUCT_IDS = PRODUCTS.map((p) => p.id) as [ProductId, ...ProductId[]];
 
+export function findProduct(id: string | null | undefined): Product | undefined {
+  return PRODUCTS.find((p) => p.id === id);
+}
+
 export const SUBSCRIPTION = {
   price: 54,
-  description: "2 пачки по 250 г раз в месяц",
+  terms: ["2 пачки по 250 г", "Раз в месяц", "Доставка по Минску бесплатно"],
+  line: "Подписка · 2 × 250 г в месяц · 54 BYN / мес",
 } as const;
 
 export const STUDIO = {
+  street: "Короля, 9",
   address: "Минск, ул. Короля, 9",
-  hours: [
-    { days: "пн–пт", time: "8:00–20:00" },
-    { days: "сб–вс", time: "10:00–18:00" },
-  ],
+  hours: "пн–пт 8:00–20:00, сб–вс 10:00–18:00",
+  hoursShort: "пн–пт 8–20, сб–вс 10–18",
   freeDeliveryFrom: 50,
-  since: 2019,
-  batchKg: 5,
 } as const;
-
-export function productLabel(p: Product): string {
-  return p.id === "drip" ? `${p.name}, ${p.origin.toLowerCase()}` : `${p.origin} ${p.name}`;
-}

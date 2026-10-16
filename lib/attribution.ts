@@ -1,23 +1,25 @@
-// Откуда пришёл человек: UTM, страница входа и referrer.
+// Откуда пришёл человек: UTM, клик-идентификаторы Яндекса и Meta, страница входа и referrer.
 // Запоминаем при первом заходе и обновляем, если пришёл по новой рекламной ссылке.
-// Храним 30 дней в localStorage — переживает перезагрузку и переходы по якорям.
+// Храним 30 дней в localStorage — переживает перезагрузку страницы.
 
 const STORAGE_KEY = "kvarta:attribution";
 const TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const MAX_LEN = 255;
 const MAX_URL_LEN = 2000;
 
-export const UTM_KEYS = [
+export const TRACKING_KEYS = [
   "utm_source",
   "utm_medium",
   "utm_campaign",
   "utm_content",
   "utm_term",
+  "yclid",
+  "fbclid",
 ] as const;
 
-type UtmKey = (typeof UTM_KEYS)[number];
+type TrackingKey = (typeof TRACKING_KEYS)[number];
 
-export type Attribution = Record<UtmKey, string | null> & {
+export type Attribution = Record<TrackingKey, string | null> & {
   landing_page: string | null;
   referrer: string | null;
 };
@@ -30,6 +32,8 @@ const EMPTY: Attribution = {
   utm_campaign: null,
   utm_content: null,
   utm_term: null,
+  yclid: null,
+  fbclid: null,
   landing_page: null,
   referrer: null,
 };
@@ -74,12 +78,12 @@ let current: Attribution | null = null;
 export function captureAttribution(): Attribution {
   const params = new URLSearchParams(window.location.search);
   const fromUrl = Object.fromEntries(
-    UTM_KEYS.map((k) => [k, clip(params.get(k), MAX_LEN)]),
-  ) as Record<UtmKey, string | null>;
-  const hasUtm = UTM_KEYS.some((k) => fromUrl[k]);
+    TRACKING_KEYS.map((k) => [k, clip(params.get(k), MAX_LEN)]),
+  ) as Record<TrackingKey, string | null>;
+  const hasTracking = TRACKING_KEYS.some((k) => fromUrl[k]);
   const stored = read();
 
-  if (hasUtm || !stored) {
+  if (hasTracking || !stored) {
     current = {
       ...fromUrl,
       landing_page: clip(window.location.pathname + window.location.search, MAX_URL_LEN),

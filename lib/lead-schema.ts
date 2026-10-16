@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { normalizeBelarusPhone, PHONE_HINT } from "./phone";
+import { normalizeBelarusPhone, PHONE_ERROR } from "./phone";
 import { PRODUCT_IDS } from "./products";
 
 // Одна схема для клиента (подсказки у полей) и сервера (обязательная проверка).
@@ -30,23 +30,23 @@ const optionalText = (max: number) =>
 
 export const leadFieldsSchema = z.object({
   name: z
-    .string({ error: "Напишите, как к вам обращаться" })
+    .string({ error: "Напишите имя, чтобы мы знали, как обращаться." })
     .trim()
-    .min(1, { error: "Напишите, как к вам обращаться" })
+    .min(1, { error: "Напишите имя, чтобы мы знали, как обращаться." })
     .max(LIMITS.name, { error: `Не длиннее ${LIMITS.name} символов` }),
   phone: z
-    .string({ error: "Оставьте номер, чтобы мы могли перезвонить" })
+    .string({ error: PHONE_ERROR })
     .trim()
-    .min(1, { error: "Оставьте номер, чтобы мы могли перезвонить" })
+    .min(1, { error: PHONE_ERROR })
     .transform((value, ctx) => {
       const normalized = normalizeBelarusPhone(value);
       if (!normalized) {
-        ctx.addIssue({ code: "custom", message: PHONE_HINT });
+        ctx.addIssue({ code: "custom", message: PHONE_ERROR });
         return z.NEVER;
       }
       return normalized;
     }),
-  interest: z.enum(INTERESTS, { error: "Выберите, что вас интересует" }),
+  interest: z.enum(INTERESTS, { error: "Выберите сорт, подписку или «Вопрос»." }),
   product: z
     .enum(PRODUCT_IDS, { error: "Такого кофе у нас нет" })
     .nullish()
@@ -65,6 +65,8 @@ export const attributionSchema = z.object({
   utm_campaign: optionalText(LIMITS.utm),
   utm_content: optionalText(LIMITS.utm),
   utm_term: optionalText(LIMITS.utm),
+  yclid: optionalText(LIMITS.utm),
+  fbclid: optionalText(LIMITS.utm),
   landing_page: optionalText(LIMITS.url),
   referrer: optionalText(LIMITS.url),
 });

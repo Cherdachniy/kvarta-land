@@ -1,9 +1,13 @@
 // Белорусские мобильные номера: +375 (25|29|33|44) XXX-XX-XX.
-// Принимаем привычные варианты записи: +375 29 123-45-67, 8 (029) 123 45 67,
-// 80291234567, 291234567. Всё приводим к +375XXXXXXXXX.
+// normalizeBelarusPhone — строгая проверка (клиент и сервер), принимает привычные
+// варианты записи: +375 29 123-45-67, 8 (029) 123 45 67, 80291234567, 291234567.
+// maskBelarusPhone — маска поля ввода по docs/design/DESIGN.md, раздел 7.
 
 const MOBILE_CODES = ["25", "29", "33", "44"] as const;
 const ALLOWED_CHARS = /^[\d\s()+\-.]+$/;
+
+export const PHONE_HINT = "Формат: +375 XX XXX-XX-XX. Коды 25, 29, 33, 44.";
+export const PHONE_ERROR = "Нужны 9 цифр после +375. Коды: 25, 29, 33, 44.";
 
 export function normalizeBelarusPhone(input: string): string | null {
   const raw = input.trim();
@@ -32,10 +36,18 @@ export function normalizeBelarusPhone(input: string): string | null {
   return `+375${national}`;
 }
 
-export function formatBelarusPhone(normalized: string): string {
-  const m = /^\+375(\d{2})(\d{3})(\d{2})(\d{2})$/.exec(normalized);
-  return m ? `+375 ${m[1]} ${m[2]}-${m[3]}-${m[4]}` : normalized;
+/** Промежуточные значения: «+375 2», «+375 29 123», «+375 29 123-45-67». */
+export function maskBelarusPhone(raw: string): string {
+  let d = raw.replace(/\D/g, "");
+  if (d.startsWith("375")) d = d.slice(3);
+  else if (d.length > 9 && d.startsWith("80")) d = d.slice(2);
+  d = d.slice(0, 9);
+  if (!d) return "";
+  let out = `+375 ${d.slice(0, 2)}`;
+  if (d.length > 2) out += ` ${d.slice(2, 5)}`;
+  if (d.length > 5) out += `-${d.slice(5, 7)}`;
+  if (d.length > 7) out += `-${d.slice(7, 9)}`;
+  return out;
 }
 
-export const PHONE_HINT =
-  "Нужен белорусский мобильный: код 25, 29, 33 или 44 и 7 цифр. Например, +375 29 123-45-67";
+export const PHONE_MASK_MAX_LENGTH = 17;
