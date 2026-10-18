@@ -9,3 +9,7 @@ next-env.d.ts
 .DS_Store
 .claude/
 kvarta-brief.pdf
+
+# локальная база SQLite и файл, который next dev генерирует сам
+data/
+AGENTS.md
