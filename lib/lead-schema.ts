@@ -74,7 +74,6 @@ export const attributionSchema = z.object({
 export const leadRequestSchema = leadFieldsSchema.extend(attributionSchema.shape);
 
 export type LeadFieldsInput = z.input<typeof leadFieldsSchema>;
-export type LeadRequestInput = z.input<typeof leadRequestSchema>;
 export type LeadRequest = z.output<typeof leadRequestSchema>;
 export type LeadField = keyof LeadFieldsInput;
 

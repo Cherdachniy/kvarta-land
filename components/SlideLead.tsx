@@ -82,6 +82,12 @@ export function SlideLead({ pos, choice, onChoice, friday, onRestart }: Props) {
   const inFlight = useRef(false);
   const statusRef = useRef<HTMLDivElement>(null);
   const chipsRef = useRef<HTMLDivElement>(null);
+  // Сервер отбрасывает заявки, отправленные быстрее, чем человек успел бы заполнить форму
+  const mountedAt = useRef(0);
+
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
 
   useEffect(() => {
     if (status === "ok" || status === "error") statusRef.current?.focus({ preventScroll: true });
@@ -142,7 +148,12 @@ export function SlideLead({ pos, choice, onChoice, friday, onRestart }: Props) {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...parsed.data, ...getAttribution(), website: honeypot }),
+        body: JSON.stringify({
+          ...parsed.data,
+          ...getAttribution(),
+          website: honeypot,
+          elapsed_ms: Date.now() - mountedAt.current,
+        }),
         signal: controller.signal,
       });
       const data = (await res.json().catch(() => null)) as
