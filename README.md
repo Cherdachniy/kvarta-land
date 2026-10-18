@@ -3,8 +3,8 @@
 Тестовое задание: лендинг с формой заявки для обжарки «Кварта» (Минск).
 Next.js 16 (App Router), TypeScript strict, CSS Modules, zod, SQLite/Turso.
 
-- Сайт: _ссылка после деплоя_
-- Lighthouse (мобильная версия): _скриншот после деплоя_
+- Сайт: https://kvarta-land-1hb7.vercel.app
+- Lighthouse, мобильная версия: Performance 98 · Accessibility 100 · Best Practices 100 · SEO 100 ([отчёт](docs/lighthouse/mobile.report.html))
 
 ```bash
 pnpm install
