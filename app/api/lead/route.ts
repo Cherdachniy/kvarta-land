@@ -1,11 +1,12 @@
 import { createHash } from "node:crypto";
-import type { NextRequest } from "next/server";
+import { after, type NextRequest } from "next/server";
 import { hitRateLimit, insertLeadDeduped } from "@/lib/db";
 import { fieldErrors, leadRequestSchema } from "@/lib/lead-schema";
+import { notifyTelegram } from "@/lib/telegram";
 
 // POST /api/lead — prompt.xml, раздел <api>.
 // Порядок: формат запроса → защита от ботов → лимит частоты → валидация →
-// атомарная вставка с проверкой дубля.
+// атомарная вставка с проверкой дубля → уведомление после ответа.
 
 export const runtime = "nodejs";
 
@@ -111,6 +112,7 @@ export async function POST(req: NextRequest) {
     const result = await insertLeadDeduped(lead);
     if (!result.created) return json(200, { ok: true, duplicate: true });
 
+    after(() => notifyTelegram(lead));
     return json(201, { ok: true });
   } catch (err) {
     console.error("[lead] failed:", err);
