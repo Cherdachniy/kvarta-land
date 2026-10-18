@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geologica, JetBrains_Mono } from "next/font/google";
+import { Geologica, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 const display = Geologica({
@@ -9,10 +9,10 @@ const display = Geologica({
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
+const mono = IBM_Plex_Mono({
   subsets: ["latin", "cyrillic"],
   weight: ["400", "500", "600"],
-  variable: "--font-jetbrains",
+  variable: "--font-plex-mono",
   display: "swap",
 });
 

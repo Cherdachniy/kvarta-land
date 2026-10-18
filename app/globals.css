@@ -4,7 +4,7 @@
 :root {
   /* шрифты подключены через next/font, имена переменных — из next/font */
   --font-display: var(--font-geologica), "Helvetica Neue", Arial, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, Menlo, Consolas, monospace;
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, Consolas, monospace;
   --pad-desktop: clamp(32px, 5vw, 96px);
 }
 
