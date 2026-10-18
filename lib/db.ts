@@ -16,6 +16,10 @@ let client: Client | null = null;
 let ready: Promise<Client> | null = null;
 
 function connect(): Client {
+  if (process.env.VERCEL && !process.env.TURSO_DATABASE_URL) {
+    // Файловая система Vercel только для чтения и не переживает деплой — файл-база там бессмысленна
+    throw new Error("TURSO_DATABASE_URL не задан в переменных окружения Vercel");
+  }
   const url = process.env.TURSO_DATABASE_URL || DEFAULT_URL;
   if (url.startsWith("file:")) {
     // libSQL не создаёт папку под файл базы сам
