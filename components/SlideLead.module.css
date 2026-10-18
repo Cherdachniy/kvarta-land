@@ -237,10 +237,13 @@
   flex-direction: column;
   gap: 20px;
   padding-top: 16px;
+  container-type: inline-size;
 }
 
 .ready {
-  font-size: clamp(64px, min(24vw, 12vh), 130px);
+  /* в DESIGN.md min(24vw, 12vh): «ГОТОВО.» шириной 4.09 кегля при нём шире колонки
+     на телефонах от 360 px и «О.» уходит на вторую строку. Ограничиваем шириной колонки */
+  font-size: clamp(64px, min(24vw, 12vh, 100cqi / 4.2), 130px);
   letter-spacing: -0.06em;
   line-height: 0.85;
   color: var(--gold);
