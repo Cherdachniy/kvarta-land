@@ -49,16 +49,26 @@ async function migrate(db: Client) {
 
   for (const file of pending) {
     const statements = splitStatements(readFileSync(path.join(MIGRATIONS_DIR, file), "utf8"));
-    await db.batch(
-      [
-        ...statements,
-        {
-          sql: "INSERT OR IGNORE INTO schema_migrations (name, applied_at) VALUES (?, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))",
-          args: [file],
-        },
-      ],
-      "write",
-    );
+    try {
+      await db.batch(
+        [
+          ...statements,
+          {
+            sql: "INSERT OR IGNORE INTO schema_migrations (name, applied_at) VALUES (?, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))",
+            args: [file],
+          },
+        ],
+        "write",
+      );
+    } catch (err) {
+      // Не идемпотентную миграцию (ALTER TABLE) параллельно мог применить другой
+      // холодный старт: тогда наш батч откатился, а миграция уже записана — это не ошибка
+      const done = await db.execute({
+        sql: "SELECT 1 FROM schema_migrations WHERE name = ?",
+        args: [file],
+      });
+      if (done.rows.length === 0) throw err;
+    }
   }
 }
 
@@ -94,9 +104,9 @@ export async function insertLeadDeduped(lead: LeadRequest): Promise<InsertResult
       INSERT INTO leads (
         id, name, phone, interest, product, comment,
         utm_source, utm_medium, utm_campaign, utm_content, utm_term,
-        landing_page, referrer, created_at
+        yclid, fbclid, landing_page, referrer, created_at
       )
-      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
       WHERE NOT EXISTS (
         SELECT 1 FROM leads
         WHERE phone = ? AND created_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now', ?)
@@ -114,6 +124,8 @@ export async function insertLeadDeduped(lead: LeadRequest): Promise<InsertResult
       lead.utm_campaign,
       lead.utm_content,
       lead.utm_term,
+      lead.yclid,
+      lead.fbclid,
       lead.landing_page,
       lead.referrer,
       lead.phone,

@@ -2,6 +2,11 @@
 // pnpm check:api                          — локальный dev-сервер
 // pnpm check:api https://<домен>          — задеплоенный сайт
 // Каждый прогон берёт случайный номер, поэтому его можно повторять.
+// Если доступна та же база, что у сервера (локальный файл или TURSO_* из .env.local),
+// скрипт сверяет сохранённую заявку и удаляет за собой тестовые записи.
+
+import { existsSync } from "node:fs";
+import { createClient } from "@libsql/client";
 
 const base = (process.argv[2] ?? "http://localhost:3000").replace(/\/$/, "");
 const url = `${base}/api/lead`;
@@ -21,6 +26,7 @@ const lead = (overrides = {}) => ({
   utm_source: "check",
   utm_medium: "script",
   utm_campaign: runId,
+  yclid: `y-${runId}`,
   website: "",
   elapsed_ms: 5000,
   ...overrides,
@@ -92,6 +98,26 @@ function check(name, ok, details) {
   const statuses = [];
   for (let i = 0; i < 11; i++) statuses.push((await post(lead({ phone: "123" }), { ip })).status);
   check("11-й запрос с одного IP за 10 минут → 429", statuses.at(-1) === 429, statuses);
+}
+
+// Сверка с базой и уборка за собой
+const isLocal = /^http:\/\/(localhost|127\.0\.0\.1)/.test(base);
+const dbUrl =
+  process.env.TURSO_DATABASE_URL ||
+  (isLocal && existsSync("data/leads.db") ? "file:./data/leads.db" : null);
+if (dbUrl) {
+  const db = createClient({ url: dbUrl, authToken: process.env.TURSO_AUTH_TOKEN || undefined });
+  const name = `Проверка ${runId}`;
+  const { rows } = await db.execute({ sql: "SELECT yclid FROM leads WHERE name = ?", args: [name] });
+  check(
+    "в базе ровно одна заявка прогона, yclid сохранён",
+    rows.length === 1 && rows[0].yclid === `y-${runId}`,
+    rows,
+  );
+  await db.execute({ sql: "DELETE FROM leads WHERE name = ?", args: [name] });
+  console.log("  тестовые заявки прогона удалены из базы");
+} else {
+  console.log("– сверка с базой пропущена: нет TURSO_DATABASE_URL (запустите с .env.local)");
 }
 
 console.log(failed ? `\nНе прошло: ${failed}` : "\nВсё прошло");
